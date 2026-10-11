@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc, doc, onSnapshot } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import SharedLayout from './components/SharedLayout';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,16 +7,39 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 const Dashboard = () => {
   const [blogs, setBlogs] = useState([]);
+  const [savedBlogs, setSavedBlogs] = useState([]);
+  const [activeTab, setActiveTab] = useState('posts'); // 'posts' | 'saved'
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [removingSavedId, setRemovingSavedId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) fetchUserBlogs(user.uid);
-      else navigate('/login');
+    let unsubBookmarks = null;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchUserBlogs(user.uid);
+        // Real-time listener for user's bookmarks
+        const bookmarksRef = collection(db, 'users', user.uid, 'bookmarks');
+        unsubBookmarks = onSnapshot(bookmarksRef, (snapshot) => {
+          const savedData = snapshot.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+          }));
+          setSavedBlogs(savedData);
+        }, (err) => {
+          console.error("Error listening to bookmarks:", err);
+        });
+      } else {
+        navigate('/login');
+      }
     });
-    return () => unsubscribe();
+
+    return () => {
+      unsubscribeAuth();
+      if (unsubBookmarks) unsubBookmarks();
+    };
   }, [navigate]);
 
   const fetchUserBlogs = async (uid) => {
@@ -46,6 +69,19 @@ const Dashboard = () => {
     }
   };
 
+  const handleRemoveBookmark = async (bookmarkId) => {
+    if (!auth.currentUser) return;
+    setRemovingSavedId(bookmarkId);
+    try {
+      await deleteDoc(doc(db, 'users', auth.currentUser.uid, 'bookmarks', bookmarkId));
+      setSavedBlogs(prev => prev.filter(b => b.id !== bookmarkId));
+    } catch (err) {
+      console.error("Error removing bookmark:", err);
+    } finally {
+      setRemovingSavedId(null);
+    }
+  };
+
   const formatDate = (ts) => {
     if (!ts) return 'Recently';
     const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -65,63 +101,103 @@ const Dashboard = () => {
         .dash-header {
           display: flex; align-items: flex-start; justify-content: space-between;
           gap: 1.5rem; flex-wrap: wrap;
-          margin-bottom: 2.5rem;
+          margin-bottom: 2.2rem;
           animation: fadeUp 0.5s ease both;
         }
         .dash-title-group {}
         .dash-page-label {
           font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-          letter-spacing: 0.1em; color: #4f46e5; margin-bottom: 0.4rem;
+          letter-spacing: 0.1em; color: #2dd4bf; margin-bottom: 0.4rem;
         }
         .dash-title {
           font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800;
           color: #f1f5f9; letter-spacing: -0.03em; line-height: 1.1;
         }
         .dash-subtitle {
-          font-size: 0.9rem; color: #475569; margin-top: 0.4rem;
+          font-size: 0.9rem; color: #8da39e; margin-top: 0.4rem;
         }
 
         /* STATS STRIP */
         .stats-strip {
-          display: grid; grid-template-columns: repeat(3, 1fr);
-          gap: 1rem; margin-bottom: 2.5rem;
+          display: grid; grid-template-columns: repeat(4, 1fr);
+          gap: 1rem; margin-bottom: 2.2rem;
           animation: fadeUp 0.5s ease 0.1s both;
         }
         .stat-card {
-          background: rgba(12,12,22,0.75);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 14px; padding: 1.4rem 1.5rem;
-          transition: border-color 0.3s, box-shadow 0.3s;
+          background: #14221e;
+          border: 1.5px solid #1f332d;
+          border-top: 3.5px solid #2dd4bf;
+          border-radius: 16px; padding: 1.3rem 1.4rem;
+          box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.4);
+          transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
         }
         .stat-card:hover {
-          border-color: rgba(99,102,241,0.25);
-          box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+          border-color: #2dd4bf;
+          transform: translateY(-4px);
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 12px rgba(45, 212, 191, 0.15);
         }
         .stat-card-icon {
           width: 36px; height: 36px; border-radius: 9px;
-          background: rgba(99,102,241,0.12);
-          border: 1px solid rgba(99,102,241,0.18);
+          background: #192a25;
+          border: 1px solid #1f332d;
           display: flex; align-items: center; justify-content: center;
-          color: #818cf8; margin-bottom: 1rem;
+          color: #2dd4bf; margin-bottom: 0.9rem;
           font-size: 0.95rem;
         }
         .stat-card-value {
-          font-size: 1.9rem; font-weight: 800;
+          font-size: 1.85rem; font-weight: 800;
           color: #f1f5f9; letter-spacing: -0.02em; line-height: 1;
         }
         .stat-card-label {
-          font-size: 0.78rem; color: #475569; font-weight: 500;
+          font-size: 0.76rem; color: #8da39e; font-weight: 500;
           text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.35rem;
         }
 
-        /* POSTS SECTION */
-        .posts-header {
+        /* TAB CONTROLS */
+        .dash-tabs-bar {
           display: flex; align-items: center; justify-content: space-between;
-          margin-bottom: 1.5rem;
-          animation: fadeUp 0.5s ease 0.2s both;
+          border-bottom: 1.5px solid #1f332d;
+          margin-bottom: 1.75rem;
+          gap: 1rem; flex-wrap: wrap;
         }
-        .posts-title {
-          font-size: 1.15rem; font-weight: 700; color: #f1f5f9;
+        .dash-tabs-group {
+          display: flex; gap: 0.75rem;
+        }
+        .dash-tab-btn {
+          display: inline-flex; align-items: center; gap: 0.6rem;
+          padding: 0.75rem 1.25rem;
+          background: transparent;
+          border: none;
+          border-bottom: 2.5px solid transparent;
+          color: #8da39e;
+          font-size: 0.95rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-family: inherit;
+          margin-bottom: -1.5px;
+        }
+        .dash-tab-btn:hover {
+          color: #f1f5f9;
+        }
+        .dash-tab-btn.active {
+          color: #2dd4bf;
+          border-bottom-color: #2dd4bf;
+          font-weight: 700;
+        }
+        .dash-tab-badge {
+          background: #192a25;
+          border: 1px solid #1f332d;
+          color: #8da39e;
+          padding: 0.15rem 0.55rem;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 700;
+        }
+        .dash-tab-btn.active .dash-tab-badge {
+          background: rgba(45, 212, 191, 0.15);
+          border-color: rgba(45, 212, 191, 0.3);
+          color: #2dd4bf;
         }
 
         /* BLOG ROWS */
@@ -131,25 +207,26 @@ const Dashboard = () => {
         }
         .blog-row {
           display: flex; align-items: stretch; overflow: hidden;
-          background: rgba(12,12,22,0.75);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 14px;
+          background: #14221e;
+          border: 1.5px solid #1f332d;
+          border-radius: 16px;
+          box-shadow: 0 8px 24px -3px rgba(0, 0, 0, 0.35);
           transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
         }
         .blog-row:hover {
-          border-color: rgba(99,102,241,0.25);
-          box-shadow: 0 8px 30px rgba(0,0,0,0.35);
-          transform: translateX(3px);
+          border-color: #2dd4bf;
+          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 12px rgba(45, 212, 191, 0.12);
+          transform: translateX(4px);
         }
         .blog-row-img {
-          width: 130px; flex-shrink: 0;
+          width: 140px; flex-shrink: 0;
           object-fit: cover; display: block;
         }
         .blog-row-no-img {
-          width: 130px; flex-shrink: 0;
-          background: linear-gradient(135deg, rgba(30,27,75,0.5), rgba(20,20,36,0.8));
+          width: 140px; flex-shrink: 0;
+          background: #0f1a17;
           display: flex; align-items: center; justify-content: center;
-          color: rgba(99,102,241,0.2); font-size: 2rem;
+          color: rgba(45, 212, 191, 0.3); font-size: 2rem;
         }
         .blog-row-body {
           flex: 1; padding: 1.2rem 1.5rem;
@@ -159,22 +236,22 @@ const Dashboard = () => {
         .blog-row-info { flex: 1; min-width: 0; }
         .blog-row-cat {
           font-size: 0.68rem; font-weight: 700;
-          text-transform: uppercase; letter-spacing: 0.1em; color: #6366f1;
+          text-transform: uppercase; letter-spacing: 0.1em; color: #2dd4bf;
           margin-bottom: 0.3rem;
         }
         .blog-row-title {
-          font-size: 1rem; font-weight: 700; color: #f1f5f9;
+          font-size: 1.05rem; font-weight: 700; color: #f1f5f9;
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
           text-decoration: none; display: block;
           transition: color 0.2s;
           letter-spacing: -0.01em;
         }
-        .blog-row-title:hover { color: #818cf8; }
+        .blog-row-title:hover { color: #2dd4bf; }
         .blog-row-meta {
           display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
-          font-size: 0.78rem; color: #374151; margin-top: 0.35rem;
+          font-size: 0.78rem; color: #8da39e; margin-top: 0.35rem;
         }
-        .blog-row-meta-sep { color: #1f2937; }
+        .blog-row-meta-sep { color: #1f332d; }
         .blog-row-actions {
           display: flex; gap: 0.6rem; align-items: center; flex-shrink: 0;
         }
@@ -182,38 +259,75 @@ const Dashboard = () => {
           display: inline-flex; align-items: center; gap: 0.35rem;
           font-size: 0.72rem; font-weight: 600;
           padding: 0.25rem 0.65rem; border-radius: 6px;
-          background: rgba(34,197,94,0.08);
-          border: 1px solid rgba(34,197,94,0.2);
-          color: #4ade80;
+          background: rgba(45, 212, 191, 0.12);
+          border: 1px solid rgba(45, 212, 191, 0.25);
+          color: #2dd4bf;
         }
         .blog-row-status-dot {
           width: 5px; height: 5px; border-radius: 50%;
-          background: #4ade80; box-shadow: 0 0 5px #4ade80;
+          background: #2dd4bf; box-shadow: 0 0 5px #2dd4bf;
         }
         .dash-deleting { opacity: 0.45; pointer-events: none; }
 
+        /* NEW BLOG BUTTON */
+        .dash-new-blog-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+          color: #0b1311 !important;
+          font-size: 0.92rem;
+          font-weight: 700;
+          padding: 0.72rem 1.45rem;
+          border-radius: 12px;
+          text-decoration: none;
+          box-shadow: 0 4px 18px rgba(45, 212, 191, 0.35);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          letter-spacing: 0.01em;
+          cursor: pointer;
+        }
+        .dash-new-blog-btn:hover {
+          background: linear-gradient(135deg, #34d399 0%, #14b8a6 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(45, 212, 191, 0.5);
+          color: #0b1311 !important;
+        }
+        .dash-new-blog-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.25s ease;
+        }
+        .dash-new-blog-btn:hover .dash-new-blog-icon {
+          transform: rotate(90deg);
+        }
+
         /* EMPTY STATE */
         .dash-empty {
-          text-align: center; padding: 5rem 2rem;
-          background: rgba(12,12,22,0.6);
-          border: 1px dashed rgba(255,255,255,0.06);
+          text-align: center; padding: 4.5rem 2rem;
+          background: #14221e;
+          border: 1.5px dashed #1f332d;
           border-radius: 20px;
           animation: fadeUp 0.5s ease 0.2s both;
         }
         .dash-empty-icon {
           font-size: 3rem; margin-bottom: 1.25rem;
-          animation: float 4s ease-in-out infinite;
+          color: #2dd4bf;
           display: block;
         }
 
         /* LOADING ROWS */
         .skel-row {
           display: flex; overflow: hidden;
-          background: rgba(12,12,22,0.7);
-          border: 1px solid rgba(255,255,255,0.05);
+          background: #14221e;
+          border: 1px solid #1f332d;
           border-radius: 14px; height: 90px;
         }
 
+        @media (max-width: 900px) {
+          .stats-strip { grid-template-columns: repeat(2, 1fr); }
+        }
         @media (max-width: 600px) {
           .stats-strip { grid-template-columns: 1fr; }
           .blog-row-img, .blog-row-no-img { display: none; }
@@ -226,17 +340,19 @@ const Dashboard = () => {
         <div className="dash-title-group">
           <div className="dash-page-label">My Space</div>
           <h1 className="dash-title">Dashboard</h1>
-          <p className="dash-subtitle">Manage and track your published content.</p>
+          <p className="dash-subtitle">Manage your published articles and revisit your reading list.</p>
         </div>
-        <Link to="/create-blog" className="bs-write-btn" style={{ fontSize: '0.9rem', padding: '0.7rem 1.4rem' }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-          New Post
+        <Link to="/create-blog" className="dash-new-blog-btn">
+          <span className="dash-new-blog-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </span>
+          New Blog
         </Link>
       </div>
 
-      {/* STATS */}
+      {/* STATS STRIP */}
       <div className="stats-strip">
         <div className="stat-card">
           <div className="stat-card-icon">
@@ -245,7 +361,16 @@ const Dashboard = () => {
             </svg>
           </div>
           <div className="stat-card-value">{blogs.length}</div>
-          <div className="stat-card-label">Total Posts</div>
+          <div className="stat-card-label">Your Posts</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div className="stat-card-value">{savedBlogs.length}</div>
+          <div className="stat-card-label">Saved Articles</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-icon">
@@ -273,12 +398,39 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* POSTS */}
+      {/* TABS BAR */}
+      <div className="dash-tabs-bar">
+        <div className="dash-tabs-group">
+          <button
+            className={`dash-tab-btn ${activeTab === 'posts' ? 'active' : ''}`}
+            onClick={() => setActiveTab('posts')}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Your Posts
+            <span className="dash-tab-badge">{blogs.length}</span>
+          </button>
+          <button
+            className={`dash-tab-btn ${activeTab === 'saved' ? 'active' : ''}`}
+            onClick={() => setActiveTab('saved')}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+            Saved Articles
+            <span className="dash-tab-badge">{savedBlogs.length}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* TAB CONTENT */}
       {loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {[1, 2, 3].map(i => (
             <div key={i} className="skel-row">
-              <div className="skeleton" style={{ width: '130px', flexShrink: 0 }} />
+              <div className="skeleton" style={{ width: '140px', flexShrink: 0 }} />
               <div style={{ flex: 1, padding: '1.2rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', justifyContent: 'center' }}>
                 <div className="skeleton" style={{ height: '10px', width: '60px' }} />
                 <div className="skeleton" style={{ height: '18px', width: '70%' }} />
@@ -287,31 +439,33 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-      ) : blogs.length === 0 ? (
-        <div className="dash-empty">
-          <span className="dash-empty-icon">✦</span>
-          <h3 style={{ fontSize: '1.3rem', fontWeight: '700', color: '#f1f5f9', marginBottom: '0.5rem' }}>
-            Your canvas is empty
-          </h3>
-          <p style={{ color: '#475569', marginBottom: '1.75rem', fontSize: '0.9rem' }}>
-            Start writing and your posts will appear here.
-          </p>
-          <Link to="/create-blog" className="bs-btn-primary" style={{ width: 'auto' }}>
-            Write Your First Post
-          </Link>
-        </div>
-      ) : (
-        <>
-          <div className="posts-header">
-            <h2 className="posts-title">Your Posts</h2>
-            <span className="section-count">{blogs.length} articles</span>
+      ) : activeTab === 'posts' ? (
+        /* ── YOUR POSTS TAB ── */
+        blogs.length === 0 ? (
+          <div className="dash-empty">
+            <span className="dash-empty-icon">✦</span>
+            <h3 style={{ fontSize: '1.3rem', fontWeight: '700', color: '#f1f5f9', marginBottom: '0.5rem' }}>
+              Your canvas is empty
+            </h3>
+            <p style={{ color: '#8da39e', marginBottom: '1.75rem', fontSize: '0.9rem' }}>
+              Start writing and your published posts will appear here.
+            </p>
+            <Link to="/create-blog" className="dash-new-blog-btn" style={{ width: 'auto' }}>
+              <span className="dash-new-blog-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+              Write Your First Blog
+            </Link>
           </div>
+        ) : (
           <div className="blog-rows">
             {blogs.map((blog, idx) => (
               <div
                 key={blog.id}
                 className={`blog-row animate-fade-up${deletingId === blog.id ? ' dash-deleting' : ''}`}
-                style={{ animationDelay: `${idx * 0.06}s` }}
+                style={{ animationDelay: `${idx * 0.05}s` }}
               >
                 {blog.coverImage ? (
                   <img src={blog.coverImage} alt={blog.title} className="blog-row-img" />
@@ -320,7 +474,7 @@ const Dashboard = () => {
                 )}
                 <div className="blog-row-body">
                   <div className="blog-row-info">
-                    <div className="blog-row-cat">{blog.category || 'Uncategorized'}</div>
+                    <div className="blog-row-cat">{blog.category || 'General'}</div>
                     <Link to={`/blog/${blog.id}`} className="blog-row-title">
                       {blog.title}
                     </Link>
@@ -362,7 +516,71 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
-        </>
+        )
+      ) : (
+        /* ── SAVED ARTICLES TAB ── */
+        savedBlogs.length === 0 ? (
+          <div className="dash-empty">
+            <span className="dash-empty-icon">🔖</span>
+            <h3 style={{ fontSize: '1.3rem', fontWeight: '700', color: '#f1f5f9', marginBottom: '0.5rem' }}>
+              No saved articles yet
+            </h3>
+            <p style={{ color: '#8da39e', marginBottom: '1.75rem', fontSize: '0.9rem' }}>
+              Bookmark stories you discover across the platform to build your personal reading list.
+            </p>
+            <Link to="/" className="dash-new-blog-btn" style={{ width: 'auto' }}>
+              Explore Articles
+            </Link>
+          </div>
+        ) : (
+          <div className="blog-rows">
+            {savedBlogs.map((item, idx) => (
+              <div
+                key={item.id}
+                className="blog-row animate-fade-up"
+                style={{ animationDelay: `${idx * 0.05}s` }}
+              >
+                {item.coverImage ? (
+                  <img src={item.coverImage} alt={item.title} className="blog-row-img" />
+                ) : (
+                  <div className="blog-row-no-img">🔖</div>
+                )}
+                <div className="blog-row-body">
+                  <div className="blog-row-info">
+                    <div className="blog-row-cat">{item.category || 'Story'}</div>
+                    <Link to={`/blog/${item.blogId || item.id}`} className="blog-row-title">
+                      {item.title}
+                    </Link>
+                    <div className="blog-row-meta">
+                      <span>By {item.authorName || 'Author'}</span>
+                      <span className="blog-row-meta-sep">·</span>
+                      <span>Saved {item.savedAt ? formatDate(item.savedAt) : 'Recently'}</span>
+                    </div>
+                  </div>
+                  <div className="blog-row-actions">
+                    <Link to={`/blog/${item.blogId || item.id}`} className="bs-btn-secondary" style={{ color: '#2dd4bf', borderColor: 'rgba(45, 212, 191, 0.3)' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                      </svg>
+                      Read Now
+                    </Link>
+                    <button
+                      onClick={() => handleRemoveBookmark(item.id)}
+                      className="bs-btn-danger"
+                      disabled={removingSavedId === item.id}
+                      title="Remove from saved reading list"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                      </svg>
+                      {removingSavedId === item.id ? '...' : 'Remove'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
       )}
     </SharedLayout>
   );

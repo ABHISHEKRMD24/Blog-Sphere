@@ -119,11 +119,11 @@ const EditBlog = () => {
         }
         .edit-back {
           display: inline-flex; align-items: center; gap: 0.4rem;
-          color: #475569; font-size: 0.82rem; font-weight: 500;
+          color: #8da39e; font-size: 0.82rem; font-weight: 500;
           text-decoration: none; margin-bottom: 1.25rem;
           transition: color 0.2s;
         }
-        .edit-back:hover { color: #818cf8; }
+        .edit-back:hover { color: #2dd4bf; }
 
         .edit-title-row {
           display: flex; align-items: flex-start; justify-content: space-between;
@@ -131,19 +131,19 @@ const EditBlog = () => {
         }
         .edit-page-label {
           font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-          letter-spacing: 0.1em; color: #4f46e5; margin-bottom: 0.4rem;
+          letter-spacing: 0.1em; color: #2dd4bf; margin-bottom: 0.4rem;
         }
         .edit-page-title {
           font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800;
           color: #f1f5f9; letter-spacing: -0.03em; line-height: 1.1;
         }
-        .edit-page-sub { font-size: 0.875rem; color: #475569; margin-top: 0.35rem; }
+        .edit-page-sub { font-size: 0.875rem; color: #8da39e; margin-top: 0.35rem; }
 
         /* TAB BAR */
         .edit-tabs {
           display: flex; gap: 0.25rem; margin-bottom: 1.75rem;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.05);
+          background: #101c18;
+          border: 1.5px solid #1f332d;
           border-radius: 11px; padding: 0.25rem;
           width: fit-content;
           animation: fadeUp 0.5s ease 0.08s both;
@@ -151,22 +151,25 @@ const EditBlog = () => {
         .edit-tab {
           padding: 0.5rem 1.2rem; border-radius: 8px;
           background: none; border: none;
-          color: #475569; font-size: 0.85rem; font-weight: 600;
+          color: #8da39e; font-size: 0.85rem; font-weight: 600;
           cursor: pointer; transition: all 0.25s; font-family: inherit;
           display: flex; align-items: center; gap: 0.4rem;
         }
         .edit-tab.active {
-          background: rgba(99,102,241,0.15);
-          color: #a5b4fc;
-          box-shadow: 0 0 0 1px rgba(99,102,241,0.2);
+          background: #14221e;
+          color: #2dd4bf;
+          border: 1px solid #1f332d;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
-        .edit-tab:hover:not(.active) { color: #94a3b8; background: rgba(255,255,255,0.04); }
+        .edit-tab:hover:not(.active) { color: #f1f5f9; background: #192a25; }
 
         /* FORM CARD */
         .edit-card {
-          background: rgba(10,10,20,0.8);
-          border: 1px solid rgba(255,255,255,0.06);
+          background: #14221e;
+          border: 1.5px solid #1f332d;
+          border-top: 4px solid #2dd4bf;
           border-radius: 20px; overflow: hidden;
+          box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.5), 0 8px 18px rgba(0, 0, 0, 0.3);
           animation: fadeUp 0.5s ease 0.14s both;
         }
         .edit-card-body { padding: 2.5rem; }
@@ -174,13 +177,13 @@ const EditBlog = () => {
         /* IMAGE STUFF */
         .cover-upload-zone {
           position: relative; border-radius: 12px; overflow: hidden;
-          border: 2px dashed rgba(255,255,255,0.08);
-          background: rgba(255,255,255,0.02);
+          border: 2px dashed #1f332d;
+          background: #0f1a17;
           transition: border-color 0.3s, background 0.3s; cursor: pointer;
         }
         .cover-upload-zone:hover {
-          border-color: rgba(99,102,241,0.4);
-          background: rgba(99,102,241,0.03);
+          border-color: #2dd4bf;
+          background: #13221d;
         }
         .cover-upload-inner {
           padding: 2rem; text-align: center;
@@ -188,19 +191,19 @@ const EditBlog = () => {
         }
         .cover-upload-icon {
           width: 48px; height: 48px; border-radius: 12px;
-          background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
+          background: #192a25; border: 1px solid #1f332d;
           display: flex; align-items: center; justify-content: center;
-          color: #818cf8; margin-bottom: 0.25rem;
+          color: #2dd4bf; margin-bottom: 0.25rem;
         }
-        .cover-upload-label { font-size: 0.9rem; color: #94a3b8; font-weight: 500; }
-        .cover-upload-sub { font-size: 0.78rem; color: #374151; }
+        .cover-upload-label { font-size: 0.9rem; color: #f1f5f9; font-weight: 600; }
+        .cover-upload-sub { font-size: 0.78rem; color: #5e7a73; }
         .cover-upload-input {
           position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
         }
-        .cover-preview-wrap { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+        .cover-preview-wrap { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid #1f332d; }
         .cover-preview-img { width: 100%; max-height: 280px; object-fit: cover; display: block; }
         .cover-preview-overlay {
-          position: absolute; inset: 0; background: rgba(0,0,0,0.5); opacity: 0;
+          position: absolute; inset: 0; background: rgba(0,0,0,0.6); opacity: 0;
           display: flex; align-items: center; justify-content: center;
           transition: opacity 0.25s; cursor: pointer;
           font-size: 0.85rem; color: #fff; font-weight: 600; gap: 0.4rem;
@@ -210,32 +213,32 @@ const EditBlog = () => {
 
         .bs-select {
           -webkit-appearance: none; appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232dd4bf' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
           background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem;
         }
 
         .content-editor-toolbar {
           display: flex; align-items: center; gap: 0.4rem;
           padding: 0.6rem 0.75rem;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.06);
+          background: #101c18;
+          border: 1.5px solid #1f332d;
           border-bottom: none; border-radius: 10px 10px 0 0;
         }
         .toolbar-btn {
           padding: 0.3rem 0.55rem;
           background: none; border: none; border-radius: 5px;
-          color: #475569; font-size: 0.8rem; font-weight: 700;
+          color: #8da39e; font-size: 0.8rem; font-weight: 700;
           cursor: pointer; transition: all 0.2s; font-family: inherit;
         }
-        .toolbar-btn:hover { background: rgba(99,102,241,0.1); color: #818cf8; }
-        .toolbar-sep { width: 1px; height: 16px; background: rgba(255,255,255,0.08); margin: 0 0.2rem; }
+        .toolbar-btn:hover { background: #162822; color: #2dd4bf; }
+        .toolbar-sep { width: 1px; height: 16px; background: #1f332d; margin: 0 0.2rem; }
 
         .word-count-bar {
           display: flex; align-items: center; justify-content: space-between;
           padding: 0.6rem 0.5rem 0;
-          font-size: 0.78rem; color: #374151;
+          font-size: 0.78rem; color: #5e7a73;
         }
-        .word-count-highlight { color: #818cf8; font-weight: 600; }
+        .word-count-highlight { color: #2dd4bf; font-weight: 600; }
 
         .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 
@@ -243,21 +246,21 @@ const EditBlog = () => {
         .edit-card-footer {
           display: flex; align-items: center; justify-content: space-between;
           padding: 1.5rem 2.5rem;
-          border-top: 1px solid rgba(255,255,255,0.05);
-          background: rgba(255,255,255,0.015);
+          border-top: 1.5px solid #1f332d;
+          background: #101c18;
           flex-wrap: wrap; gap: 0.75rem;
         }
-        .edit-last-saved { font-size: 0.8rem; color: #374151; display: flex; align-items: center; gap: 0.4rem; }
+        .edit-last-saved { font-size: 0.8rem; color: #5e7a73; display: flex; align-items: center; gap: 0.4rem; }
         .edit-actions { display: flex; gap: 0.75rem; }
 
         .tag-hint {
-          font-size: 0.75rem; color: #374151; margin-top: 0.4rem;
+          font-size: 0.75rem; color: #5e7a73; margin-top: 0.4rem;
           display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;
         }
         .tag-example {
           padding: 0.2rem 0.5rem; border-radius: 4px;
-          background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.15);
-          color: #818cf8; font-size: 0.72rem;
+          background: #162822; border: 1px solid #1f332d;
+          color: #2dd4bf; font-size: 0.72rem;
         }
 
         @media (max-width: 600px) {

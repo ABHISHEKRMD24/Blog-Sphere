@@ -51,8 +51,8 @@ const BlogSphereLogin = () => {
     const drawGrid = () => {
       ctx.clearRect(0, 0, width, height);
       const cellSize = 52;
-      ctx.strokeStyle = "rgba(255,255,255,0.028)";
-      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = "rgba(45,212,191,0.04)";
+      ctx.lineWidth = 0.8;
       for (let x = 0; x < width; x += cellSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -70,8 +70,8 @@ const BlogSphereLogin = () => {
         width * 0.38, height * 0.42, 0,
         width * 0.38, height * 0.42, width * 0.55
       );
-      grad.addColorStop(0, "rgba(99,102,241,0.07)");
-      grad.addColorStop(0.5, "rgba(79,70,229,0.035)");
+      grad.addColorStop(0, "rgba(45,212,191,0.06)");
+      grad.addColorStop(0.5, "rgba(13,148,136,0.03)");
       grad.addColorStop(1, "transparent");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
@@ -128,7 +128,7 @@ const BlogSphereLogin = () => {
       padding: 0,
       fontFamily:
         "'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      backgroundColor: "#0a0a0f",
+      backgroundColor: "#0d1715",
       minHeight: "100vh",
       width: "100%",
       overflow: "hidden",
@@ -159,7 +159,7 @@ const BlogSphereLogin = () => {
       height: "55vw",
       borderRadius: "50%",
       background:
-        "radial-gradient(circle, rgba(99,102,241,0.055) 0%, transparent 70%)",
+        "radial-gradient(circle, rgba(45,212,191,0.08) 0%, transparent 70%)",
       zIndex: 1,
       pointerEvents: "none",
     },
@@ -171,7 +171,7 @@ const BlogSphereLogin = () => {
       height: "48vw",
       borderRadius: "50%",
       background:
-        "radial-gradient(circle, rgba(139,92,246,0.04) 0%, transparent 70%)",
+        "radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 70%)",
       zIndex: 1,
       pointerEvents: "none",
     },
@@ -215,28 +215,28 @@ const BlogSphereLogin = () => {
     },
     logoText: {
       fontSize: "clamp(1.05rem, 1.3vw, 1.25rem)",
-      fontWeight: 600,
-      color: "#ffffff",
+      fontWeight: 700,
+      color: "#f1f5f9",
       letterSpacing: "-0.01em",
     },
     headline: {
       fontSize: "clamp(2.4rem, 4.5vw, 4.2rem)",
-      fontWeight: 700,
-      color: "#ffffff",
+      fontWeight: 800,
+      color: "#f1f5f9",
       lineHeight: 1.08,
       letterSpacing: "-0.035em",
       marginBottom: "clamp(1.2rem, 2.5vh, 1.8rem)",
       maxWidth: "580px",
     },
     headlineAccent: {
-      background: "linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #4f46e5 100%)",
+      background: "linear-gradient(135deg, #ffffff 0%, #2dd4bf 60%, #14b8a6 100%)",
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
       backgroundClip: "text",
     },
     supportingText: {
       fontSize: "clamp(0.88rem, 1.1vw, 1.02rem)",
-      color: "#8b8fa8",
+      color: "#8da39e",
       lineHeight: 1.72,
       maxWidth: "420px",
       marginBottom: "clamp(2.2rem, 4vh, 3.5rem)",
@@ -257,13 +257,13 @@ const BlogSphereLogin = () => {
       width: "6px",
       height: "6px",
       borderRadius: "50%",
-      backgroundColor: "#6366f1",
+      backgroundColor: "#2dd4bf",
       flexShrink: 0,
-      boxShadow: "0 0 8px rgba(99,102,241,0.6)",
+      boxShadow: "0 0 8px rgba(45,212,191,0.6)",
     },
     featureText: {
       fontSize: "clamp(0.82rem, 0.95vw, 0.92rem)",
-      color: "#9ca3af",
+      color: "#8da39e",
       fontWeight: 400,
       letterSpacing: "0.01em",
     },
@@ -280,7 +280,7 @@ const BlogSphereLogin = () => {
       gap: "clamp(1.5rem, 3vw, 2.5rem)",
       marginTop: "auto",
       paddingTop: "clamp(1.5rem, 3vh, 2.5rem)",
-      borderTop: "1px solid rgba(255,255,255,0.055)",
+      borderTop: "1.5px solid #1f332d",
     },
     statItem: {
       display: "flex",
@@ -290,14 +290,14 @@ const BlogSphereLogin = () => {
     statNumber: {
       fontSize: "clamp(1.1rem, 1.5vw, 1.4rem)",
       fontWeight: 700,
-      color: "#ffffff",
+      color: "#f1f5f9",
       letterSpacing: "-0.025em",
     },
     statLabel: {
       fontSize: "clamp(0.7rem, 0.85vw, 0.78rem)",
-      color: "#6b7280",
-      fontWeight: 400,
-      letterSpacing: "0.03em",
+      color: "#5e7a73",
+      fontWeight: 500,
+      letterSpacing: "0.05em",
       textTransform: "uppercase",
     },
     cardWrapper: {
@@ -308,12 +308,13 @@ const BlogSphereLogin = () => {
       transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s",
     },
     card: {
-      background: "linear-gradient(145deg, rgba(18,18,28,0.98) 0%, rgba(13,13,22,0.99) 100%)",
-      border: "1px solid rgba(255,255,255,0.075)",
-      borderRadius: "18px",
+      background: "#14221e",
+      border: "1.5px solid #1f332d",
+      borderTop: "4px solid #2dd4bf",
+      borderRadius: "20px",
       padding: "clamp(1.8rem, 3.5vw, 2.6rem)",
       boxShadow:
-        "0 0 0 1px rgba(99,102,241,0.06), 0 24px 80px rgba(0,0,0,0.55), 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.055)",
+        "0 20px 45px -10px rgba(0,0,0,0.55), 0 8px 18px rgba(0,0,0,0.3)",
       position: "relative",
       overflow: "hidden",
     },
@@ -322,19 +323,19 @@ const BlogSphereLogin = () => {
       top: 0,
       left: 0,
       right: 0,
-      height: "1px",
-      background: "linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.35) 50%, transparent 100%)",
+      height: "3px",
+      background: "linear-gradient(90deg, #2dd4bf 0%, #0d9488 50%, #2dd4bf 100%)",
     },
     cardTitle: {
       fontSize: "clamp(1.3rem, 2vw, 1.55rem)",
-      fontWeight: 700,
-      color: "#f9fafb",
+      fontWeight: 800,
+      color: "#f1f5f9",
       letterSpacing: "-0.025em",
       marginBottom: "0.35rem",
     },
     cardSubtitle: {
       fontSize: "clamp(0.8rem, 0.95vw, 0.875rem)",
-      color: "#6b7280",
+      color: "#8da39e",
       marginBottom: "clamp(1.6rem, 3vh, 2.2rem)",
       fontWeight: 400,
       lineHeight: 1.5,
@@ -345,8 +346,8 @@ const BlogSphereLogin = () => {
     label: {
       display: "block",
       fontSize: "0.78rem",
-      fontWeight: 500,
-      color: "#9ca3af",
+      fontWeight: 600,
+      color: "#8da39e",
       marginBottom: "0.45rem",
       letterSpacing: "0.02em",
     },
@@ -358,22 +359,22 @@ const BlogSphereLogin = () => {
       padding: "0.72rem 1rem",
       paddingRight: "2.8rem",
       background: focused
-        ? "rgba(99,102,241,0.055)"
-        : "rgba(255,255,255,0.028)",
+        ? "#12201b"
+        : "#0e1815",
       border: hasError
-        ? "1px solid rgba(239,68,68,0.6)"
+        ? "1.5px solid rgba(239,68,68,0.7)"
         : focused
-        ? "1px solid rgba(99,102,241,0.5)"
-        : "1px solid rgba(255,255,255,0.075)",
+        ? "1.5px solid #2dd4bf"
+        : "1.5px solid #1f332d",
       borderRadius: "10px",
-      color: "#f3f4f6",
+      color: "#f1f5f9",
       fontSize: "0.9rem",
       outline: "none",
       boxSizing: "border-box",
       transition: "all 0.22s cubic-bezier(0.16,1,0.3,1)",
       boxShadow: focused
-        ? "0 0 0 3px rgba(99,102,241,0.12), 0 2px 8px rgba(0,0,0,0.2)"
-        : "0 1px 4px rgba(0,0,0,0.15)",
+        ? "0 0 0 3px rgba(45,212,191,0.2)"
+        : "0 1px 2px rgba(0,0,0,0.15)",
       fontFamily: "inherit",
       letterSpacing: "0.01em",
     }),
@@ -382,7 +383,7 @@ const BlogSphereLogin = () => {
       right: "0.85rem",
       top: "50%",
       transform: "translateY(-50%)",
-      color: "#4b5563",
+      color: "#5e7a73",
       cursor: "pointer",
       transition: "color 0.18s",
       display: "flex",
@@ -412,19 +413,19 @@ const BlogSphereLogin = () => {
     checkbox: {
       width: "15px",
       height: "15px",
-      accentColor: "#6366f1",
+      accentColor: "#2dd4bf",
       cursor: "pointer",
     },
     checkboxText: {
       fontSize: "0.8rem",
-      color: "#9ca3af",
+      color: "#8da39e",
       fontWeight: 400,
     },
     forgotLink: {
       fontSize: "0.8rem",
-      color: "#6366f1",
+      color: "#2dd4bf",
       textDecoration: "none",
-      fontWeight: 500,
+      fontWeight: 600,
       transition: "color 0.18s",
       cursor: "pointer",
       background: "none",
@@ -436,19 +437,19 @@ const BlogSphereLogin = () => {
       width: "100%",
       padding: "0.82rem 1rem",
       background: loading
-        ? "rgba(99,102,241,0.5)"
-        : "linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)",
+        ? "rgba(45,212,191,0.5)"
+        : "linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%)",
       border: "none",
       borderRadius: "10px",
-      color: "#ffffff",
+      color: "#0b1311",
       fontSize: "0.9rem",
-      fontWeight: 600,
+      fontWeight: 700,
       cursor: loading ? "not-allowed" : "pointer",
       letterSpacing: "0.01em",
       transition: "all 0.22s cubic-bezier(0.16,1,0.3,1)",
       boxShadow: loading
         ? "none"
-        : "0 4px 16px rgba(99,102,241,0.38), 0 1px 4px rgba(0,0,0,0.2)",
+        : "0 4px 16px rgba(45,212,191,0.28)",
       fontFamily: "inherit",
       display: "flex",
       alignItems: "center",
@@ -467,11 +468,11 @@ const BlogSphereLogin = () => {
     dividerLine: {
       flex: 1,
       height: "1px",
-      background: "rgba(255,255,255,0.065)",
+      background: "#1f332d",
     },
     dividerText: {
       fontSize: "0.75rem",
-      color: "#4b5563",
+      color: "#5e7a73",
       fontWeight: 400,
       whiteSpace: "nowrap",
       letterSpacing: "0.03em",
@@ -479,12 +480,12 @@ const BlogSphereLogin = () => {
     googleBtn: {
       width: "100%",
       padding: "0.78rem 1rem",
-      background: "rgba(255,255,255,0.032)",
-      border: "1px solid rgba(255,255,255,0.085)",
+      background: "#14221e",
+      border: "1.5px solid #1f332d",
       borderRadius: "10px",
-      color: "#e5e7eb",
+      color: "#f1f5f9",
       fontSize: "0.875rem",
-      fontWeight: 500,
+      fontWeight: 600,
       cursor: "pointer",
       letterSpacing: "0.01em",
       transition: "all 0.2s cubic-bezier(0.16,1,0.3,1)",
@@ -493,17 +494,18 @@ const BlogSphereLogin = () => {
       alignItems: "center",
       justifyContent: "center",
       gap: "0.65rem",
+      boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
       marginBottom: "clamp(1.2rem, 2.5vh, 1.6rem)",
     },
     createAccountRow: {
       textAlign: "center",
       fontSize: "0.8rem",
-      color: "#6b7280",
+      color: "#8da39e",
       fontWeight: 400,
     },
     createLink: {
-      color: "#818cf8",
-      fontWeight: 500,
+      color: "#2dd4bf",
+      fontWeight: 600,
       textDecoration: "none",
       marginLeft: "0.3rem",
       cursor: "pointer",

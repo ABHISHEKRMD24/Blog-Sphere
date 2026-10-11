@@ -59,8 +59,8 @@ const BlogSphereSignUp = () => {
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       const cell = 52;
-      ctx.strokeStyle = "rgba(255,255,255,0.027)";
-      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = "rgba(45,212,191,0.04)";
+      ctx.lineWidth = 0.8;
       for (let x = 0; x < w; x += cell) {
         ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
       }
@@ -68,8 +68,8 @@ const BlogSphereSignUp = () => {
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
       }
       const g1 = ctx.createRadialGradient(w * 0.35, h * 0.4, 0, w * 0.35, h * 0.4, w * 0.52);
-      g1.addColorStop(0, "rgba(99,102,241,0.065)");
-      g1.addColorStop(0.6, "rgba(79,70,229,0.03)");
+      g1.addColorStop(0, "rgba(45,212,191,0.06)");
+      g1.addColorStop(0.6, "rgba(13,148,136,0.03)");
       g1.addColorStop(1, "transparent");
       ctx.fillStyle = g1;
       ctx.fillRect(0, 0, w, h);
@@ -208,7 +208,7 @@ const BlogSphereSignUp = () => {
     root: {
       margin: 0, padding: 0,
       fontFamily: "'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      backgroundColor: "#0a0a0f",
+      backgroundColor: "#0d1715",
       minHeight: "100vh", width: "100%",
       overflow: "hidden", position: "relative",
       display: "flex", alignItems: "stretch",
@@ -220,13 +220,13 @@ const BlogSphereSignUp = () => {
     glow1: {
       position: "fixed", top: "-18%", left: "-10%",
       width: "58vw", height: "58vw", borderRadius: "50%",
-      background: "radial-gradient(circle, rgba(99,102,241,0.052) 0%, transparent 70%)",
+      background: "radial-gradient(circle, rgba(45,212,191,0.08) 0%, transparent 70%)",
       zIndex: 1, pointerEvents: "none",
     },
     glow2: {
       position: "fixed", bottom: "-22%", right: "-8%",
       width: "50vw", height: "50vw", borderRadius: "50%",
-      background: "radial-gradient(circle, rgba(139,92,246,0.038) 0%, transparent 70%)",
+      background: "radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 70%)",
       zIndex: 1, pointerEvents: "none",
     },
     particleLayer: {
@@ -257,21 +257,21 @@ const BlogSphereSignUp = () => {
     },
     logoText: {
       fontSize: "clamp(1.05rem,1.3vw,1.25rem)",
-      fontWeight: 600, color: "#ffffff", letterSpacing: "-0.01em",
+      fontWeight: 600, color: "#f1f5f9", letterSpacing: "-0.01em",
     },
     headline: {
       fontSize: "clamp(2.3rem,4.2vw,4rem)",
-      fontWeight: 700, color: "#ffffff",
+      fontWeight: 700, color: "#f1f5f9",
       lineHeight: 1.08, letterSpacing: "-0.035em",
       marginBottom: "clamp(1.1rem,2.2vh,1.6rem)", maxWidth: "560px",
     },
     headlineAccent: {
-      background: "linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #4f46e5 100%)",
+      background: "linear-gradient(135deg, #ffffff 0%, #2dd4bf 60%, #14b8a6 100%)",
       WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
     },
     supportingText: {
       fontSize: "clamp(0.86rem,1.05vw,1rem)",
-      color: "#8b8fa8", lineHeight: 1.72, maxWidth: "400px",
+      color: "#8da39e", lineHeight: 1.72, maxWidth: "400px",
       marginBottom: "clamp(2rem,3.5vh,3rem)", fontWeight: 400,
     },
     featureList: {
@@ -282,12 +282,12 @@ const BlogSphereSignUp = () => {
     featureItem: { display: "flex", alignItems: "center", gap: "0.85rem" },
     featureDot: {
       width: "6px", height: "6px", borderRadius: "50%",
-      backgroundColor: "#6366f1", flexShrink: 0,
-      boxShadow: "0 0 8px rgba(99,102,241,0.6)",
+      backgroundColor: "#2dd4bf", flexShrink: 0,
+      boxShadow: "0 0 8px rgba(45,212,191,0.5)",
     },
     featureText: {
       fontSize: "clamp(0.8rem,0.93vw,0.9rem)",
-      color: "#9ca3af", fontWeight: 400, letterSpacing: "0.01em",
+      color: "#8da39e", fontWeight: 400, letterSpacing: "0.01em",
     },
     decorativeWrap: {
       position: "absolute", right: 0, top: "50%",
@@ -303,25 +303,26 @@ const BlogSphereSignUp = () => {
       paddingBottom: "clamp(1rem,2vh,1.5rem)",
     },
     card: {
-      background: "linear-gradient(145deg, rgba(18,18,28,0.98) 0%, rgba(13,13,22,0.99) 100%)",
-      border: "1px solid rgba(255,255,255,0.075)",
-      borderRadius: "18px",
+      background: "#14221e",
+      border: "1.5px solid #1f332d",
+      borderTop: "4px solid #2dd4bf",
+      borderRadius: "20px",
       padding: "clamp(1.6rem,3vw,2.4rem)",
-      boxShadow: "0 0 0 1px rgba(99,102,241,0.06), 0 24px 80px rgba(0,0,0,0.55), 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.055)",
+      boxShadow: "0 20px 45px -10px rgba(0,0,0,0.5), 0 8px 18px rgba(0,0,0,0.3)",
       position: "relative", overflow: "hidden",
     },
     cardSheen: {
-      position: "absolute", top: 0, left: 0, right: 0, height: "1px",
-      background: "linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.35) 50%, transparent 100%)",
+      position: "absolute", top: 0, left: 0, right: 0, height: "3px",
+      background: "linear-gradient(90deg, #1f332d 0%, #2dd4bf 50%, #1f332d 100%)",
     },
     cardTitle: {
       fontSize: "clamp(1.25rem,1.9vw,1.5rem)",
-      fontWeight: 700, color: "#f9fafb",
+      fontWeight: 700, color: "#f1f5f9",
       letterSpacing: "-0.025em", marginBottom: "0.3rem",
     },
     cardSubtitle: {
       fontSize: "clamp(0.78rem,0.93vw,0.865rem)",
-      color: "#6b7280",
+      color: "#8da39e",
       marginBottom: "clamp(1.4rem,2.5vh,2rem)",
       fontWeight: 400, lineHeight: 1.5,
     },
@@ -333,7 +334,7 @@ const BlogSphereSignUp = () => {
     fieldGroup: { marginBottom: "clamp(0.75rem,1.5vh,1rem)" },
     label: {
       display: "block", fontSize: "0.76rem",
-      fontWeight: 500, color: "#9ca3af",
+      fontWeight: 500, color: "#8da39e",
       marginBottom: "0.4rem", letterSpacing: "0.02em",
     },
     inputWrap: { position: "relative" },
@@ -341,21 +342,21 @@ const BlogSphereSignUp = () => {
       width: "100%",
       padding: "0.68rem 0.95rem",
       paddingRight: "2.6rem",
-      background: focused ? "rgba(99,102,241,0.052)" : "rgba(255,255,255,0.026)",
+      background: focused ? "#162822" : "#0e1815",
       border: hasError
         ? "1px solid rgba(239,68,68,0.58)"
         : hasSuccess
-        ? "1px solid rgba(34,197,94,0.38)"
+        ? "1px solid rgba(45,212,191,0.5)"
         : focused
-        ? "1px solid rgba(99,102,241,0.48)"
-        : "1px solid rgba(255,255,255,0.072)",
+        ? "1px solid #2dd4bf"
+        : "1px solid #1f332d",
       borderRadius: "10px",
-      color: "#f3f4f6", fontSize: "0.875rem",
+      color: "#f1f5f9", fontSize: "0.875rem",
       outline: "none", boxSizing: "border-box",
       transition: "all 0.22s cubic-bezier(0.16,1,0.3,1)",
       boxShadow: focused
-        ? "0 0 0 3px rgba(99,102,241,0.11), 0 2px 8px rgba(0,0,0,0.18)"
-        : "0 1px 4px rgba(0,0,0,0.14)",
+        ? "0 0 0 3px rgba(45,212,191,0.15)"
+        : "none",
       fontFamily: "inherit", letterSpacing: "0.01em",
     }),
     inputIconBtn: {
@@ -363,14 +364,15 @@ const BlogSphereSignUp = () => {
       transform: "translateY(-50%)",
       background: "none", border: "none", padding: 0,
       cursor: "pointer", display: "flex", alignItems: "center",
+      color: "#8da39e",
       transition: "color 0.18s", fontFamily: "inherit",
     },
     errorText: {
-      fontSize: "0.71rem", color: "#f87171",
+      fontSize: "0.71rem", color: "#ef4444",
       marginTop: "0.3rem", fontWeight: 400,
     },
     successText: {
-      fontSize: "0.71rem", color: "#4ade80",
+      fontSize: "0.71rem", color: "#2dd4bf",
       marginTop: "0.3rem", fontWeight: 400,
     },
     strengthRow: {
@@ -379,7 +381,7 @@ const BlogSphereSignUp = () => {
     },
     strengthBar: (active, color) => ({
       flex: 1, height: "3px", borderRadius: "2px",
-      background: active ? color : "rgba(255,255,255,0.08)",
+      background: active ? color : "#1f332d",
       transition: "background 0.3s ease",
     }),
     strengthLabel: (color) => ({
@@ -393,25 +395,25 @@ const BlogSphereSignUp = () => {
       marginBottom: "clamp(1.1rem,2vh,1.5rem)",
       marginTop: "0.2rem",
     },
-    checkbox: { width: "14px", height: "14px", accentColor: "#6366f1", cursor: "pointer", marginTop: "1px", flexShrink: 0 },
-    termsText: { fontSize: "0.77rem", color: "#6b7280", lineHeight: 1.55, fontWeight: 400 },
+    checkbox: { width: "14px", height: "14px", accentColor: "#2dd4bf", cursor: "pointer", marginTop: "1px", flexShrink: 0 },
+    termsText: { fontSize: "0.77rem", color: "#8da39e", lineHeight: 1.55, fontWeight: 400 },
     termsLink: {
-      color: "#818cf8", fontWeight: 500, textDecoration: "none",
+      color: "#2dd4bf", fontWeight: 500, textDecoration: "none",
       cursor: "pointer", background: "none", border: "none",
       padding: 0, fontFamily: "inherit", fontSize: "inherit",
     },
     createBtn: (disabled) => ({
       width: "100%", padding: "0.8rem 1rem",
       background: disabled
-        ? "rgba(99,102,241,0.28)"
-        : "linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)",
+        ? "rgba(45,212,191,0.2)"
+        : "linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%)",
       border: "none", borderRadius: "10px",
-      color: disabled ? "rgba(255,255,255,0.4)" : "#ffffff",
-      fontSize: "0.875rem", fontWeight: 600,
+      color: disabled ? "rgba(255,255,255,0.4)" : "#0b1311",
+      fontSize: "0.875rem", fontWeight: 700,
       cursor: disabled ? "not-allowed" : "pointer",
       letterSpacing: "0.01em",
       transition: "all 0.22s cubic-bezier(0.16,1,0.3,1)",
-      boxShadow: disabled ? "none" : "0 4px 16px rgba(99,102,241,0.36), 0 1px 4px rgba(0,0,0,0.18)",
+      boxShadow: disabled ? "none" : "0 4px 16px rgba(45,212,191,0.3)",
       fontFamily: "inherit",
       display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
       marginBottom: "clamp(0.85rem,1.6vh,1.1rem)",
@@ -420,25 +422,26 @@ const BlogSphereSignUp = () => {
       display: "flex", alignItems: "center", gap: "0.8rem",
       marginBottom: "clamp(0.85rem,1.6vh,1.1rem)",
     },
-    divLine: { flex: 1, height: "1px", background: "rgba(255,255,255,0.062)" },
-    divText: { fontSize: "0.73rem", color: "#4b5563", fontWeight: 400, whiteSpace: "nowrap", letterSpacing: "0.03em" },
+    divLine: { flex: 1, height: "1px", background: "#1f332d" },
+    divText: { fontSize: "0.73rem", color: "#5e7a73", fontWeight: 400, whiteSpace: "nowrap", letterSpacing: "0.03em" },
     googleBtn: {
       width: "100%", padding: "0.75rem 1rem",
-      background: "rgba(255,255,255,0.03)",
-      border: "1px solid rgba(255,255,255,0.082)",
-      borderRadius: "10px", color: "#e5e7eb",
+      background: "#101c18",
+      border: "1px solid #1f332d",
+      borderRadius: "10px", color: "#f1f5f9",
       fontSize: "0.85rem", fontWeight: 500,
       cursor: "pointer", letterSpacing: "0.01em",
       transition: "all 0.2s cubic-bezier(0.16,1,0.3,1)",
       fontFamily: "inherit",
       display: "flex", alignItems: "center", justifyContent: "center", gap: "0.62rem",
+      boxShadow: "none",
       marginBottom: "clamp(1rem,2vh,1.4rem)",
     },
     signInRow: {
-      textAlign: "center", fontSize: "0.78rem", color: "#6b7280", fontWeight: 400,
+      textAlign: "center", fontSize: "0.78rem", color: "#8da39e", fontWeight: 400,
     },
     signInLink: {
-      color: "#818cf8", fontWeight: 500, cursor: "pointer",
+      color: "#2dd4bf", fontWeight: 500, cursor: "pointer",
       background: "none", border: "none", padding: 0,
       fontFamily: "inherit", fontSize: "inherit", marginLeft: "0.28rem",
       transition: "color 0.18s",
@@ -458,29 +461,29 @@ const BlogSphereSignUp = () => {
     },
     successIcon: {
       width: "54px", height: "54px",
-      background: "rgba(34,197,94,0.12)",
-      border: "1px solid rgba(34,197,94,0.3)",
+      background: "rgba(45,212,191,0.15)",
+      border: "1px solid rgba(45,212,191,0.4)",
       borderRadius: "50%",
       display: "flex", alignItems: "center", justifyContent: "center",
       marginBottom: "0.5rem",
     },
     successTitle: {
       fontSize: "clamp(1.2rem,1.8vw,1.45rem)",
-      fontWeight: 700, color: "#f9fafb",
+      fontWeight: 700, color: "#f1f5f9",
       letterSpacing: "-0.022em",
     },
     successSub: {
-      fontSize: "0.855rem", color: "#6b7280",
+      fontSize: "0.855rem", color: "#8da39e",
       lineHeight: 1.6, maxWidth: "300px",
     },
     successBtn: {
       marginTop: "0.5rem",
       padding: "0.78rem 2rem",
-      background: "linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)",
+      background: "linear-gradient(135deg, #0d9488 0%, #0f766e 100%)",
       border: "none", borderRadius: "10px",
       color: "#fff", fontSize: "0.875rem", fontWeight: 600,
       cursor: "pointer", fontFamily: "inherit",
-      boxShadow: "0 4px 16px rgba(99,102,241,0.36)",
+      boxShadow: "0 4px 16px rgba(13,148,136,0.28)",
       letterSpacing: "0.01em",
     },
   };
@@ -498,13 +501,12 @@ const BlogSphereSignUp = () => {
       <rect width="38" height="38" rx="10" fill="url(#lg1)" />
       <defs>
         <linearGradient id="lg1" x1="0" y1="0" x2="38" y2="38">
-          <stop offset="0%" stopColor="#6366f1" />
-          <stop offset="100%" stopColor="#4338ca" />
+          <stop offset="0%" stopColor="#0d9488" />
+          <stop offset="100%" stopColor="#0f766e" />
         </linearGradient>
       </defs>
       <path d="M10 12h12a5 5 0 0 1 0 10H10V12z" fill="white" opacity="0.95" />
       <path d="M10 22h14a5 5 0 0 1 0 10H10V22z" fill="white" opacity="0.6" />
-      <circle cx="27" cy="13" r="2" fill="white" opacity="0.5" />
     </svg>
   );
 
